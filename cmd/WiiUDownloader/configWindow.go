@@ -73,9 +73,18 @@ func NewConfigWindow(config *Config) (*ConfigWindow, error) {
 
 	saveButton.Connect("clicked", func() {
 		config.DarkMode = darkModeCheck.GetActive()
-		config.LastSelectedPath = downloadPathEntry.GetLayout().GetText()
-		if err := config.Save(); err != nil {
-			log.Println(err)
+
+		var newPath = downloadPathEntry.GetLayout().GetText()
+		if newPath != "" && !isValidPath(newPath) {
+			errorDialog := gtk.MessageDialogNew(win, gtk.DIALOG_MODAL, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, "Invalid download path. Please select a valid directory.")
+			defer errorDialog.Destroy()
+			errorDialog.Run()
+		} else {
+			config.LastSelectedPath = newPath
+
+			if err := config.Save(); err != nil {
+				log.Println(err)
+			}
 		}
 	})
 
