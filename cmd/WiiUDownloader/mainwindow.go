@@ -111,9 +111,6 @@ func (mw *MainWindow) updateTitles(titles []wiiudownloader.TitleEntry) {
 }
 
 func (mw *MainWindow) createConfigWindow(config *Config) error {
-	if mw.configWindow != nil {
-		return nil
-	}
 	configWindow, err := NewConfigWindow(config)
 	if err != nil {
 		return err
